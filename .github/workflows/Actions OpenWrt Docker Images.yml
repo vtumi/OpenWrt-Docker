@@ -142,9 +142,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/openwrt:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/openwrt:${{ env.DEVICE_PLATFORM }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/openwrt:${{ env.DOCKER_EXTERA_TAG }}
-            ghcr.io/${{ github.actor }}/openwrt:latest
-            ghcr.io/${{ github.actor }}/openwrt:${{ env.DEVICE_PLATFORM }}
-            ghcr.io/${{ github.actor }}/openwrt:${{ env.DOCKER_EXTERA_TAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/openwrt-amd64:latest
+            ghcr.io/${{ github.actor }}/openwrt-amd64:latest
