@@ -117,6 +117,7 @@ jobs:
           cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           cp -rf $GITHUB_WORKSPACE/files .
           chmod +x files/etc/rc.local
+          cp -rf $GITHUB_WORKSPACE/packages .
 
       - name: Build RootFS (amd64)
         if: env.DOCKER_EXTERA_TAG == 'amd64'
