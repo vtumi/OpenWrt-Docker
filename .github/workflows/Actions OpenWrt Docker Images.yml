@@ -134,6 +134,18 @@ jobs:
           cd $GITHUB_WORKSPACE
           rm -rf openwrt-imagebuilder*
 
+      - name: Upload to Release
+        if: env.DOCKER_EXTERA_TAG == 'amd64'
+        uses: ncipollo/release-action@main
+        with:
+          tag: ${{ env.build_tag }}
+          artifacts: ${{ env.GITHUB_WORKSPACE }}/*rootfs.tar.gz
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build & Push Image (amd64)
         if: env.DOCKER_EXTERA_TAG == 'amd64'
         uses: docker/build-push-action@v4
