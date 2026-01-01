@@ -138,7 +138,7 @@ jobs:
         if: env.DOCKER_EXTERA_TAG == 'amd64'
         uses: ncipollo/release-action@main
         with:
-          tag: ${{ env.build_tag }}
+          tag: latest
           artifacts: ${{ env.GITHUB_WORKSPACE }}/*rootfs.tar.gz
           allowUpdates: true
           removeArtifacts: false
