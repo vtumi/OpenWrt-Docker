@@ -10,7 +10,7 @@ name: Actions OpenWrt Docker Images
 
 env:
   PREFIX_URL: https://mirrors.ustc.edu.cn/immortalwrt/releases/24.10.5/targets/
-  DEVICE_VERSION: 24.10.5
+  OPENWRT_VERSION: 24.10.5
 
 on:
   workflow_dispatch:
@@ -109,20 +109,26 @@ jobs:
 
       - name: Download Image Builder
         run: |
-          wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.zst
+          wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$OPENWRT_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.zst
 
       - name: Set Image Builder
         run: |
           tar -I zstd -xf *.tar.zst
-          cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          cd immortalwrt-imagebuilder-$OPENWRT_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           cp -rf $GITHUB_WORKSPACE/files .
-          chmod +x files/etc/rc.local
           cp -rf $GITHUB_WORKSPACE/packages .
+          chmod +x files/etc/rc.local
+          export KERNEL_VERSION="$(ls packages | grep kernel | awk -F '_' '{print $2}')"
+          sed -i "s/OPENWRT_VERSION/$OPENWRT_VERSION/g; \
+            s/DEVICE_SUBTARGET/$DEVICE_SUBTARGET/g; \
+            s/DEVICE_TARGET/$DEVICE_TARGET/g; \
+            s/KERNEL_VERSION/$KERNEL_VERSION/g; \
+            s/DEVICE_PLATFORM/$DEVICE_PLATFORM/g" files/etc/opkg/distfeeds.conf
 
       - name: Build RootFS (amd64)
         if: env.DOCKER_EXTERA_TAG == 'amd64'
         run: |
-          cd immortalwrt-imagebuilder-$DEVICE_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          cd immortalwrt-imagebuilder-$OPENWRT_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           chmod +x $GITHUB_WORKSPACE/scripts/*
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           export CONFIG_PACKAGES=$(cat $GITHUB_WORKSPACE/config/packages.config | tr -s "\n" " ")
