@@ -116,9 +116,10 @@ jobs:
           tar -I zstd -xf *.tar.zst
           cd immortalwrt-imagebuilder-$OPENWRT_VERSION-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           sed -i "s|https://downloads.immortalwrt.org|https://mirrors.ustc.edu.cn/immortalwrt|g" repositories.conf
+          mkdir -p files/etc/opkg
+          grep "^src/gz " repositories.conf > files/etc/opkg/distfeeds.conf
           cp -rf $GITHUB_WORKSPACE/files .
           chmod +x files/etc/rc.local
-          grep "^src/gz " repositories.conf > files/etc/opkg/distfeeds.conf
           cp -rf $GITHUB_WORKSPACE/packages .
 
       - name: Build RootFS (amd64)
