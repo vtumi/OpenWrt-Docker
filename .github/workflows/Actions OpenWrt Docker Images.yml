@@ -9,8 +9,8 @@
 name: Actions OpenWrt Docker Images
 
 env:
-  PREFIX_URL: https://mirrors.ustc.edu.cn/immortalwrt/releases/24.10.5/targets/
-  OPENWRT_VERSION: 24.10.5
+  PREFIX_URL: https://mirrors.ustc.edu.cn/immortalwrt/releases/24.10.6/targets/
+  OPENWRT_VERSION: 24.10.6
 
 on:
   workflow_dispatch:
